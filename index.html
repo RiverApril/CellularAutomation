@@ -16,12 +16,6 @@
         moore: "moore",
         vonNeumann: "vonNeumann"
       }
-      var neighborhoodCalcs = {
-        sum: "sum",
-        average: "mean",
-        min: "min",
-        max: "max"
-      }
       var defColors = [
         "#FFFFFF",
         "#000000",
@@ -101,26 +95,25 @@
             0: {
               name: "empty",
               def: 0,
-              color: "#000000",
-              neighborValue: 0
+              color: "#000000"
             },
             1: {
               name: "Electron Head",
               def: 2,
-              color: "#0000FF",
-              neighborValue: 1
+              color: "#0000FF"
             },
             2: {
               name: "Electron Tail",
               def: 3,
-              color: "#FF0000",
-              neighborValue: 0
+              color: "#FF0000"
             },
             3: {
               name: "Wire",
-              neighborEquals: {
-                1: 1,
-                2: 1
+              neighborCount: {
+                1:{//Count cells with id 1
+                  1: 1, //If 1 neighbor set cell to 1
+                  2: 1, //If 2 neighbors set cell to 1
+                }
               },
               def: 3,
               color: "#FFFF00",
@@ -129,7 +122,6 @@
           },
           lineColor: "#808080",
           neighborPattern: "moore",
-          neighborhoodCalculation: "sum",
           neighborhoodSize: 1,
           defaultCell: 0
         }
@@ -285,21 +277,6 @@
           }
           if (!pat) {
             rule.neighborPattern = neighborhoodPatterns.moore;
-          }
-        }
-        //
-        if (rule.neighborhoodCalculation == undefined) {
-          rule.neighborhoodCalculation = neighborhoodCalcs.sum;
-        } {
-          var cal = false;
-          for (var c in neighborhoodCalcs) {
-            if (c == rule.neighborhoodCalculation) {
-              cal = true;
-              break;
-            }
-          }
-          if (!cal) {
-            rule.neighborhoodCalculation = neighborhoodCalcs.sum;
           }
         }
         //
@@ -598,37 +575,12 @@
       }
 
 
-      function neighbourValue(x, y) {
-        if (currentRule.neighborhoodCalculation == neighborhoodCalcs.sum) {
-          var n = 0;
-          neighbors(x, y, currentRule.neighborhoodSize, function (i, j) {
-            n += getCellAsNeighborWithSafty(i, j);
-          });
-          return n;
-        } else if (currentRule.neighborhoodCalculation == neighborhoodCalcs.average) {
-          var n = 0;
-          var q = 0;
-          neighbors(x, y, currentRule.neighborhoodSize, function (i, j) {
-            n += getCellAsNeighborWithSafty(i, j);
-            q += 1;
-          });
-          return n / q;
-        } else if (currentRule.neighborhoodCalculation == neighborhoodCalcs.min) {
-          var n = 0;
-          neighbors(x, y, currentRule.neighborhoodSize, function (i, j) {
-            n = Math.min(n, getCellAsNeighborWithSafty(i, j));
-          });
-          return n;
-        } else if (currentRule.neighborhoodCalculation == neighborhoodCalcs.max) {
-          var n = 0;
-          neighbors(x, y, currentRule.neighborhoodSize, function (i, j) {
-            n = Math.max(n, getCellAsNeighborWithSafty(i, j));
-          });
-          return n;
-        } else {
-          console.log("Neighborhood Calculation not recognised : ", currentRule.neighborhoodCalculation);
-          return 0;
-        }
+      function neighbourValue(x, y, t) {
+        var n = 0;
+        neighbors(x, y, currentRule.neighborhoodSize, function (i, j) {
+          n += getCellAsNeighborWithSafty(i, j) == t ? 1 : 0;
+        });
+        return n;
       }
 
 
