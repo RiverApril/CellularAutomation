@@ -575,10 +575,10 @@
       }
 
 
-      function neighbourValue(x, y, t) {
+      function neighbourValue(x, y) {
         var n = 0;
         neighbors(x, y, currentRule.neighborhoodSize, function (i, j) {
-          n += getCellAsNeighborWithSafty(i, j) == t ? 1 : 0;
+          n += getCellAsNeighborWithSafty(i, j);
         });
         return n;
       }
