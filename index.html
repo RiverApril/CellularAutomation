@@ -117,7 +117,6 @@
               },
               def: 3,
               color: "#FFFF00",
-              neighborValue: 0
             }
           },
           lineColor: "#808080",
@@ -503,7 +502,7 @@
         for (var i = 0; i < gridSize.width; i++) {
           for (var j = 0; j < gridSize.height; j++) {
 
-            var n = neighbourValue(i, j);
+            var n = neighbourValueSum(i, j);
 
             var state = currentRule.state[grid[i][j]];
 
@@ -552,6 +551,21 @@
               }
             }
 
+            if (state.neighborCount != undefined) {
+              for (var b in state.neighborCount){
+                var m = neighbourCount(i, j, b);
+                if(state.neighborCount[b][m] != undefined){
+                  tempGrid[i][j] = state.neighborCount[b][m];
+                  c = true;
+                  break;
+                }
+              }
+            }
+
+            if(c){
+              continue;
+            }
+
             if (state.def != undefined) {
               tempGrid[i][j] = state.def;
               continue;
@@ -575,10 +589,19 @@
       }
 
 
-      function neighbourValue(x, y) {
+      function neighbourValueSum(x, y) {
         var n = 0;
         neighbors(x, y, currentRule.neighborhoodSize, function (i, j) {
           n += getCellAsNeighborWithSafty(i, j);
+        });
+        return n;
+      }
+
+
+      function neighbourCount(x, y, c) {
+        var n = 0;
+        neighbors(x, y, currentRule.neighborhoodSize, function (i, j) {
+          n += getCellAsNeighborWithSafty(i, j) == c ? 1 : 0;
         });
         return n;
       }
