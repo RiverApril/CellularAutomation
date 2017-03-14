@@ -353,6 +353,7 @@
       var mouseDown = false;
       var firstPaint = 1;
       var secondPaint = 0;
+      var clearPaint = 0;
       var currentPaint = firstPaint;
       
       var selectMode = false;
@@ -680,11 +681,20 @@
       }
 
       function clearGrid() {
-
-        for (var i = 0; i < gridSize.width; i++) {
-          for (var j = 0; j < gridSize.height; j++) {
-            grid[i][j] = currentRule.defaultCell;
-            updateGrid[i][j] = true;
+        
+        if(selectMode){
+          console.log(selection);
+          for (var i = 0; i < selection.w; i++) {
+            for (var j = 0; j < selection.h; j++) {
+              selection.g[i][j] = clearPaint;
+            }
+          }
+        }else{
+          for (var i = 0; i < gridSize.width; i++) {
+            for (var j = 0; j < gridSize.height; j++) {
+              grid[i][j] = clearPaint;
+              updateGrid[i][j] = true;
+            }
           }
         }
 
@@ -981,6 +991,18 @@
         }
         selectPaint2.value = secondPaint;
 
+        var selectPaintClear = document.getElementById("inputPaintClear");
+        selectPaintClear.options.length = 0;
+        for (var p in currentRule.state) {
+          if (p != "def") {
+            var option = document.createElement("option");
+            option.text = (currentRule.state[p].name?currentRule.state[p].name+" ":"") + p + (currentRule.state[p].color ? (" (" + ntc.name(currentRule.state[p].color)[1] + ")") : " (No color)");
+            option.value = p;
+            selectPaintClear.add(option);
+          }
+        }
+        selectPaintClear.value = clearPaint;
+
 
         onResizeWindow();
 
@@ -1200,6 +1222,8 @@
           firstPaint = element.options[element.selectedIndex].value;
         } else if (element.id == "inputPaint2") {
           secondPaint = element.options[element.selectedIndex].value;
+        } else if (element.id == "inputPaintClear") {
+          clearPaint = element.options[element.selectedIndex].value;
         }
       }
 
@@ -1284,7 +1308,7 @@
         buttonPopInOut.style.display = editorShown ? "block" : "none";
         
         var buttonToggleFancyText = document.getElementById("buttonToggleFancyText");
-        buttonToggleFancyText.innerHTML = fancyTextEditorActive ? "Text Editor" : "Fancy Editor";
+        buttonToggleFancyText.innerHTML = fancyTextEditorActive ? "Basic Editor" : "Fancy Editor";
         buttonToggleFancyText.style.display = editorShown ? "block" : "none";
         
         var buttonShowHidEditor = document.getElementById("buttonShowHidEditor");
@@ -1324,7 +1348,7 @@
         button.innerHTML = selectMode ? "Place" : "Select";
         
         document.getElementById("buttonCopyHere").style.display = selectMode ? "block" : "none";
-        document.getElementById("buttonDelSelection").style.display = selectMode ? "block" : "none";
+        //document.getElementById("buttonDelSelection").style.display = selectMode ? "block" : "none";
         
         if(!selectMode){
           selection.place(true);
@@ -1384,19 +1408,14 @@
                 </td>
               </tr>
               <tr>
-                <td>
-                  <button id="buttonClear" onClick="clearGrid();" title="Clear">Clear</button>
-                </td>
-                <td colspan="2">
+                <td colspan="3">
                   FPS:
                   <input id="inputFps" type="number" onChange="inputChanged(this);" style="width:4em;">
                 </td>
               </tr>
               <tr>
-                <td>
+                <td colspan="3">
                   <input type="checkbox" id="checkWrap" onChange="setWrap()">Wrap
-                </td>
-                <td>
                   <input type="checkbox" id="checkGrid" onChange="setGrid()">Grid
                 </td>
               </tr>
@@ -1430,14 +1449,6 @@
                 <td>
                   <button id="buttonCWRotate" onClick="rotateGrid(true);" title="Rotate Clickwise (E)">&#8635;</button>
                 </td>
-                <td>|
-                </td>
-                <td>
-                  <button id="buttonSelectMode" onClick="toggleSelectMode();" title="Toggle Select Mode">Select</button>
-                </td>
-                <td>
-                  <button id="buttonCopyHere" onClick="selection.place(false);" title="Copy Here">Copy Here</button>
-                </td>
               </tr>
               <tr>
                 <td>
@@ -1465,10 +1476,15 @@
                 <td>
                   <button id="buttonRightTen" onClick="shiftGrid(10, 0);" title="Shift right 10 (D)">&#8608;</button>
                 </td>
-                <td>|
+              </tr>
+            </table>
+            <table>
+              <tr>
+                <td>
+                  <button id="buttonSelectMode" onClick="toggleSelectMode();" title="Toggle Select Mode">Select</button>
                 </td>
-                <td colspan="2">
-                  <button id="buttonDelSelection" onClick="selection.clear();" title="Clear Selection">Clear Selection</button>
+                <td>
+                  <button id="buttonCopyHere" onClick="selection.place(false);" title="Copy Here" style="display: none;">Copy Here</button>
                 </td>
               </tr>
             </table>
@@ -1493,6 +1509,13 @@
                   </select>
                 </td>
               </tr>
+              <tr>
+                <td>
+                  <button id="buttonClear" onClick="clearGrid();" title="Fill">Fill</button>
+                  <select id="inputPaintClear" onChange="inputChanged(this);">
+                  </select>
+                </td>
+              </tr>
             </table>
           </td>
         </tr>
@@ -1512,7 +1535,7 @@
             <button id="buttonShowHidEditor" onClick="showHideEditor();" title="Hide/Show editor">Hide/Show editor</button>
           </td>
           <td>
-            <button id="buttonToggleFancyText" onClick="fancyTextEditor();" title="Fancy/Text editor">Fancy/Text editor</button>
+            <button id="buttonToggleFancyText" onClick="fancyTextEditor();" title="Fancy/Basic editor">Fancy/Basic editor</button>
           </td>
           <td>
             <button id="buttonPopInOut" onClick="popInOut();" title="Move editor">Move editor</button>
