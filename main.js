@@ -46,6 +46,9 @@ var rulePresets = {
         neighborValue: 0,
         def: 0,
         color: '#0000FF',
+      },
+      def: {
+        def: 0
       }
     },
     lineColor: '#808080',
@@ -74,6 +77,9 @@ var rulePresets = {
         def: 0,
         color: '#000000',
       },
+      def: {
+        def: 0
+      }
     }
   },
   wireWorld: {
@@ -104,12 +110,227 @@ var rulePresets = {
         },
         def: 3,
         color: "#FFFF00",
+      },
+      def: {
+        def: 0
       }
     },
     lineColor: "#808080",
     neighborPattern: "moore",
     neighborhoodSize: 1,
     defaultCell: 0
+  },
+  sandPiles: {
+    name: "Sand Piles",
+    state: {
+      0: {
+        color: "#000000"
+      },
+      1: {
+        color: "#FFFF00"
+      },
+      2: {
+        color: "#0000FF"
+      },
+      3: {
+        color: "#FF0000"
+      },
+      4: {
+        color: "#00FF00"
+      },
+      5: {
+        color: "#00FFFF"
+      },
+      6: {
+        color: "#FFFF00"
+      },
+      7: {
+        color: "#FF00FF"
+      },
+      8: {
+        color: "#808080"
+      },
+      64: {
+        color: "#FFFFFF"
+      },
+      512: {
+        color: "#FFFFFF"
+      },
+      4096: {
+        color: "#FFFFFF"
+      },
+      32768: {
+        color: "#FFFFFF"
+      },
+      262144: {
+        color: "#FFFFFF"
+      },
+      2097152: {
+        color: "#FFFFFF"
+      },
+      16777216: {
+        color: "#FFFFFF"
+      }
+    },
+    defcolor: "#FFFFFF",
+    lineColor: "#202020",
+    neighborhoodSize: 1,
+    defaultCell: 0,
+    handler: function(grid, i, j){
+        let a = getCellAsNeighborWithSafty(i-1, j);
+        let b = getCellAsNeighborWithSafty(i+1, j);
+        let c = getCellAsNeighborWithSafty(i, j-1);
+        let d = getCellAsNeighborWithSafty(i, j+1);
+        let overflow = (a >= 4?(Math.floor(a/4)):0) + 
+                       (b >= 4?(Math.floor(b/4)):0) + 
+                       (c >= 4?(Math.floor(c/4)):0) +
+                       (d >= 4?(Math.floor(d/4)):0);
+        return (grid[i][j]%4) + overflow;
+      }
+  },
+  sandPilesSlowTopple: {
+    name: "Sand Piles slow topple",
+    state: {
+      0: {
+        color: "#000000"
+      },
+      1: {
+        color: "#FFFF00"
+      },
+      2: {
+        color: "#0000FF"
+      },
+      3: {
+        color: "#FF0000"
+      },
+      4: {
+        color: "#00FF00"
+      },
+      5: {
+        color: "#00FFFF"
+      },
+      6: {
+        color: "#FFFF00"
+      },
+      7: {
+        color: "#FF00FF"
+      },
+      8: {
+        color: "#808080"
+      },
+      64: {
+        color: "#FFFFFF"
+      },
+      512: {
+        color: "#FFFFFF"
+      },
+      4096: {
+        color: "#FFFFFF"
+      },
+      32768: {
+        color: "#FFFFFF"
+      },
+      262144: {
+        color: "#FFFFFF"
+      },
+      2097152: {
+        color: "#FFFFFF"
+      },
+      16777216: {
+        color: "#FFFFFF"
+      }
+    },
+    defcolor: "#FFFFFF",
+    lineColor: "#202020",
+    neighborhoodSize: 1,
+    defaultCell: 0,
+    handler: function(grid, i, j){
+        let a = getCellAsNeighborWithSafty(i-1, j);
+        let b = getCellAsNeighborWithSafty(i+1, j);
+        let c = getCellAsNeighborWithSafty(i, j-1);
+        let d = getCellAsNeighborWithSafty(i, j+1);
+        let overflow = (a >= 4?1:0) + 
+                       (b >= 4?1:0) + 
+                       (c >= 4?1:0) +
+                       (d >= 4?1:0);
+        return (grid[i][j]>=4?grid[i][j]-4:grid[i][j]) + overflow;
+      }
+  },
+  sandPiles8: {
+    name: "Sand Piles 8",
+    state: {
+      0: {
+        color: "#000000"
+      },
+      1: {
+        color: "#FFFF00"
+      },
+      2: {
+        color: "#0000FF"
+      },
+      3: {
+        color: "#FF0000"
+      },
+      4: {
+        color: "#00FF00"
+      },
+      5: {
+        color: "#00FFFF"
+      },
+      6: {
+        color: "#FFFF00"
+      },
+      7: {
+        color: "#FF00FF"
+      },
+      8: {
+        color: "#808080"
+      },
+      64: {
+        color: "#FFFFFF"
+      },
+      512: {
+        color: "#FFFFFF"
+      },
+      4096: {
+        color: "#FFFFFF"
+      },
+      32768: {
+        color: "#FFFFFF"
+      },
+      262144: {
+        color: "#FFFFFF"
+      },
+      2097152: {
+        color: "#FFFFFF"
+      },
+      16777216: {
+        color: "#FFFFFF"
+      }
+    },
+    defcolor: "#FFFFFF",
+    lineColor: "#202020",
+    neighborhoodSize: 1,
+    defaultCell: 0,
+    handler: function(grid, i, j){
+        let a = getCellAsNeighborWithSafty(i-1, j);
+        let b = getCellAsNeighborWithSafty(i+1, j);
+        let c = getCellAsNeighborWithSafty(i, j-1);
+        let d = getCellAsNeighborWithSafty(i, j+1);
+        let e = getCellAsNeighborWithSafty(i-1, j-1);
+        let f = getCellAsNeighborWithSafty(i+1, j+1);
+        let g = getCellAsNeighborWithSafty(i+1, j-1);
+        let h = getCellAsNeighborWithSafty(i-1, j+1);
+        let overflow = (a >= 8?(Math.floor(a/8)):0) + 
+                       (b >= 8?(Math.floor(b/8)):0) + 
+                       (c >= 8?(Math.floor(c/8)):0) +
+                       (d >= 8?(Math.floor(d/8)):0) +
+                       (e >= 8?(Math.floor(e/8)):0) + 
+                       (f >= 8?(Math.floor(f/8)):0) + 
+                       (g >= 8?(Math.floor(g/8)):0) +
+                       (h >= 8?(Math.floor(h/8)):0);
+        return (grid[i][j]%8) + overflow;
+      }
   }
 
   /*banks: { //C0,NN,S3babbabbabba3b,B7ab3aba3b
@@ -329,6 +550,9 @@ var lineWidth = 1;
 
 var drawGridLines = true;
 var wrapAround = true;
+var additiveClicking = false;
+
+var lastGridDragged = {x:-1, y:-1}
 
 var grid;
 var tempGrid;
@@ -339,6 +563,8 @@ var firstPaint = 1;
 var secondPaint = 0;
 var clearPaint = 0;
 var currentPaint = firstPaint;
+
+var pauseDrawing = false;
 
 var selectMode = false;
 var selection = {
@@ -489,6 +715,11 @@ function nextStep() {
 
   for (var i = 0; i < gridSize.width; i++) {
     for (var j = 0; j < gridSize.height; j++) {
+      
+      if(currentRule.handler != undefined){
+        tempGrid[i][j] = currentRule.handler(grid, i, j);
+        continue;
+      }
 
       var n = neighbourValueSum(i, j);
 
@@ -845,10 +1076,13 @@ function firstDraw() {
 }
 
 function redraw() {
+  if(pauseDrawing){
+    return;
+  }
   for (var i = 0; i < gridSize.width; i++) {
     for (var j = 0; j < gridSize.height; j++) {
       if (updateGrid[i][j]) {
-        context.fillStyle = currentRule.state[grid[i][j]] != undefined ? currentRule.state[grid[i][j]].color : currentRule.state.def.color;
+        context.fillStyle = currentRule.state[grid[i][j]] != undefined ? currentRule.state[grid[i][j]].color : currentRule.defcolor;
         if (drawGridLines && cellSize > 4) {
           context.fillRect(i * cellSize + 1, j * cellSize + 1, cellSize - 1, cellSize - 1);
         } else {
@@ -928,6 +1162,8 @@ function changeCurrentRule(n) {
   updateRuleUi();
 
   setWrap(wrapAround);
+
+  setAdditive(additiveClicking);
 }
 
 function updateRuleUi() {
@@ -1058,11 +1294,12 @@ function onDownCanvas(event) {
     }else{
       updateGrid[x][y] = true;
       if (event.button == 0) {
-        currentPaint = grid[x][y] == firstPaint ? currentRule.defaultCell : firstPaint;
+        currentPaint = (grid[x][y] == firstPaint && !additiveClicking) ? currentRule.defaultCell : firstPaint;
       } else if (event.button == 2) {
-        currentPaint = grid[x][y] == secondPaint ? currentRule.defaultCell : secondPaint;
+        currentPaint = (grid[x][y] == secondPaint && !additiveClicking) ? currentRule.defaultCell : secondPaint;
       }
-      grid[x][y] = currentPaint;
+      grid[x][y] = (additiveClicking && currentPaint!=0)?(parseInt(grid[x][y])+parseInt(currentPaint)):currentPaint;
+      lastGridDragged = {x:-1, y:-1};
     }
   }
   redraw();
@@ -1095,8 +1332,11 @@ function onMoveCanvas(event) {
       selection.y2 = y;
     }else{
       if (x >= 0 && y >= 0 && x < gridSize.width && y < gridSize.height) {
-        updateGrid[x][y] = true;
-        grid[x][y] = currentPaint;
+        if(lastGridDragged.x != x || lastGridDragged.y != y){
+          updateGrid[x][y] = true;
+          grid[x][y] = (additiveClicking && currentPaint!=0)?(parseInt(grid[x][y])+parseInt(currentPaint)):currentPaint;
+          lastGridDragged = {x:x, y:y};
+        }
       }
     }
 
@@ -1348,6 +1588,7 @@ function setWrap(val){
   if(val == undefined){
     wrapAround = document.getElementById("checkWrap").checked;
   }else{
+    wrapAround = val;
     document.getElementById("checkWrap").checked = wrapAround;
   }
 }
@@ -1356,8 +1597,16 @@ function setGrid(val){
   if(val == undefined){
     drawGridLines = document.getElementById("checkGrid").checked;
   }else{
+    drawGridLines = val;
     document.getElementById("checkGrid").checked = drawGridLines;
   }
   firstDraw();
 }
 
+function setAdditive(val){
+    if(val == undefined){
+        additiveClicking = document.getElementById("checkAdditive").checked;
+    }else{
+        document.getElementById("checkAdditive").checked = additiveClicking;
+    }
+}
